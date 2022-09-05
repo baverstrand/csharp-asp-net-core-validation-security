@@ -45,25 +45,16 @@ namespace ConferenceTracker.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrators")]
-        public IActionResult Create(Speaker speaker)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([Bind("Id,FirstName,LastName,Description,EmailAddress,PhoneNumber")]Speaker speaker)
         {
             if(!ModelState.IsValid)
             {
                 return View(speaker);
             }
-            var validatedSpeaker = new Speaker
-            {
-                Id = speaker.Id,
-                FirstName = speaker.FirstName,
-                LastName = speaker.LastName,
-                Description = speaker.Description,
-                EmailAddress = speaker.EmailAddress,
-                PhoneNumber = speaker.PhoneNumber
-            };
 
-            _speakerRepository.Create(validatedSpeaker);
+            _speakerRepository.Create(speaker);
             return RedirectToAction(nameof(Index));
         }
 
